@@ -101,3 +101,7 @@ body {
 .list-item__remove:hover svg path {
     fill: #ff4747;
 }
+
+.list-item__remove svg{
+    pointer-events: none;
+}

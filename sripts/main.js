@@ -7,6 +7,11 @@ function bindEvents() {
     addButton.addEventListener("click", (event)=>{
         addTask(event.target);
     })
+    document.addEventListener("click", (event) => {
+        if (event.target.classList.contains("list-item__remove")) {
+            removeTask(event.target)
+        }
+    })
     
 }
 
@@ -15,7 +20,7 @@ function addTask (button){
     let inputValue = inputElement.value.trim();
     inputElement.value = "";
     if(inputValue == ""){
-        console.log("Error");
+        alert("Задача не может быть пустой")
         return;
     }
     const listItem = createTaskElement(inputValue);
@@ -39,3 +44,7 @@ function createTaskElement(textValue) {
     return listItemWrapper;
 }
 
+function removeTask(item) {
+    const parent = item.parentElement;
+    parent.remove();
+}
