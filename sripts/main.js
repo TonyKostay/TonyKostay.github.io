@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function(){
     bindEvents();
+    getSavedTasks();
 })
+let cookieObject = {};
+let cookieStringGlobal = "task=apple;hub=mamamaam";
 
 function bindEvents() {
     const addButton = document.querySelector(".main-input__add");
@@ -47,4 +50,19 @@ function createTaskElement(textValue) {
 function removeTask(item) {
     const parent = item.parentElement;
     parent.remove();
+}
+
+function getSavedTasks() {
+    let cookieString = cookieStringGlobal; // тут нужен document.cookie
+    if (cookieString.length == 0) { console.log("in saved 0"); return; }
+    
+    let cookie = cookieString.split(";");
+    for (let i = 0; i < cookie.length; i++) {
+        let cookieItem = cookie[i].split("=");
+        cookieObject[cookieItem[0]] = cookieItem[1];
+    }
+}
+
+function getNextId() {
+
 }
