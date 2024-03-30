@@ -88,6 +88,10 @@ body {
     padding-bottom: 10px;
 }
 
+.list-item__text {
+    overflow-x: auto;
+}
+
 .list-item__remove {
     border: none;
     background: none;
