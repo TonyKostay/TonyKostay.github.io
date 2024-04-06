@@ -1,13 +1,15 @@
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
+    let TasksObject = getSavedTasks();
+
     bindEvents();
-    getSavedTasks();
+
 })
-let cookieObject = {};
-let cookieStringGlobal = "task=apple;hub=mamamaam";
+
+
 
 function bindEvents() {
     const addButton = document.querySelector(".main-input__add");
-    addButton.addEventListener("click", (event)=>{
+    addButton.addEventListener("click", (event) => {
         addTask(event.target);
     })
     document.addEventListener("click", (event) => {
@@ -15,21 +17,21 @@ function bindEvents() {
             removeTask(event.target)
         }
     })
-    
+
 }
 
-function addTask (button){
+function addTask(button) {
     const inputElement = button.previousElementSibling;
     let inputValue = inputElement.value.trim();
     inputElement.value = "";
-    if(inputValue == ""){
+    if (inputValue == "") {
         alert("Задача не может быть пустой")
         return;
     }
     const listItem = createTaskElement(inputValue);
     const listItems = document.querySelector(".list-items");
     listItems.appendChild(listItem);
-} 
+}
 
 function createTaskElement(textValue) {
     const listItemWrapper = document.createElement("div");
@@ -53,16 +55,20 @@ function removeTask(item) {
 }
 
 function getSavedTasks() {
-    let cookieString = cookieStringGlobal; // тут нужен document.cookie
-    if (cookieString.length == 0) { console.log("in saved 0"); return; }
-    
-    let cookie = cookieString.split(";");
-    for (let i = 0; i < cookie.length; i++) {
-        let cookieItem = cookie[i].split("=");
-        cookieObject[cookieItem[0]] = cookieItem[1];
-    }
+    let TaskJson = localStorage.getItem('tasks');
+    if (!TaskJson) return {};
+
+    return JSON.parse(TaskJson);
 }
 
 function getNextId() {
+    let i = localStorage.getItem('lastid');
+    if (!Number(i)) {
+        i = 0;
+    }
+    i++;
 
+    localStorage.setItem('lastid', i.toString());
+
+    return i;
 }
