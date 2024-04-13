@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     let TasksObject = getSavedTasks();
-
+    loadTasks(TasksObject);
     bindEvents();
 
 })
@@ -28,13 +28,20 @@ function addTask(button) {
         alert("Задача не может быть пустой")
         return;
     }
-    const listItem = createTaskElement(inputValue);
+    const id = getNextId();
+    createTaskElement(id, inputValue);
+    updateStorage(id, inputValue);
+}
+
+function createTaskElement(id, inputValue){
+    const listItem = createTaskDOM(id, inputValue);
     const listItems = document.querySelector(".list-items");
     listItems.appendChild(listItem);
 }
 
-function createTaskElement(textValue) {
+function createTaskDOM(id, textValue) {
     const listItemWrapper = document.createElement("div");
+    listItemWrapper.dataset.id = id
     const textSpan = document.createElement("span");
     const button = document.createElement("button");
 
@@ -51,7 +58,9 @@ function createTaskElement(textValue) {
 
 function removeTask(item) {
     const parent = item.parentElement;
+    removeTaskFromStorage(parent.dataset.id);
     parent.remove();
+    
 }
 
 function getSavedTasks() {
@@ -71,4 +80,22 @@ function getNextId() {
     localStorage.setItem('lastid', i.toString());
 
     return i;
+}
+
+function updateStorage(id, inputValue) {
+    let storage = getSavedTasks();
+    storage[id] = inputValue;
+    localStorage.setItem('tasks', JSON.stringify(storage));
+}
+
+function loadTasks(tasks){
+    for (key in tasks){
+        createTaskElement(key, tasks[key]);
+    }
+}
+
+function removeTaskFromStorage(id){
+    let storage = getSavedTasks();
+    delete storage[id];
+    localStorage.setItem('tasks', JSON.stringify(storage));
 }
